@@ -1,0 +1,12 @@
+# Streamlit launch helper
+# Run the command below from the project root.
+
+command: ".venv/bin/streamlit run streamlit_app.py --server.address 127.0.0.1 --server.port 8501"
+
+stop:
+  find_process: "lsof -nP -iTCP:8501 -sTCP:LISTEN"
+  kill_process: "kill <PID>"
+
+notes:
+  - "Replace <PID> with the numeric PID printed by lsof; do not type angle brackets."
+  - "If port 8501 is occupied and you do not want to stop it, use --server.port 8502."

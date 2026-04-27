@@ -24,6 +24,8 @@ wheels/
 
 # Virtual Environment
 venv/
+.venv/
+.venv-*/
 env/
 ENV/
 
@@ -38,6 +40,9 @@ data/input/*.pdf
 data/output/summaries/*.md
 data/output/method_cards/*.md
 data/output/batch_reports/*.md
+data/output/extracted_texts/*.txt
+data/output/conversations/*.json
+data/output/reader_profiles.json
 *.log
 
 # 但保留示例文件和目录结构
@@ -45,9 +50,11 @@ data/output/batch_reports/*.md
 !data/output/summaries/.gitkeep
 !data/output/method_cards/.gitkeep
 !data/output/batch_reports/.gitkeep
+!data/output/extracted_texts/.gitkeep
+!data/output/conversations/.gitkeep
 
 # 配置文件（包含API密钥）
-# config/config.yaml  # 现在包含在仓库中作为模板，用户需要自己设置API密钥
+# config/config.yaml  # 仓库中保留占位模板，真实密钥请放到本地配置文件
 !config/config.yaml.example
 
 # 用户的实际配置文件（如果用户重命名）

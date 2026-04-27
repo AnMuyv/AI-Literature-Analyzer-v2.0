@@ -7,6 +7,9 @@ pdfplumber>=0.10.0
 # HTTP请求
 requests>=2.31.0
 
+# Web界面
+streamlit>=1.32.0
+
 # 配置文件处理
 PyYAML>=6.0
 

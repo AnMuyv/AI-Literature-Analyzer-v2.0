@@ -1,12 +1,9 @@
-# AI Literature Analyzer Configuration
-# ⚠️  警告：请在使用前设置您的真实API密钥！
-# ⚠️  注意：请不要将包含真实API密钥的配置文件提交到代码仓库！
-# 💡 建议：可以创建 my_config.yaml 并用 --config 参数指定
+# AI Literature Analyzer Configuration Example
+# 复制此文件为 config.yaml 并填入您的配置
 
 # API配置
 api:
-  # API密钥 - 请替换为您的真实API密钥！！！
-  # 获取API密钥：https://siliconflow.cn/
+  # API密钥 - 请替换为您的真实API密钥
   api_key: "your-api-key-here"
   
   # API基础URL
@@ -73,13 +70,14 @@ prompts:
   analysis_template: "prompts/analysis_template.txt"
   method_card_template: "prompts/method_card_template.txt"
   
-  # 自定义领域关键词 (用于更好的分类)
+  # 自定义领域关键词 (用于后续扩展分类或检索)
   domain_keywords:
-    量化: ["quantization", "quantize", "bit", "precision", "binary", "ternary", "int8", "fp16", "low-precision"]
-    剪枝: ["pruning", "prune", "sparsity", "sparse", "magnitude", "structured", "unstructured"]
-    蒸馏: ["distillation", "distill", "teacher", "student", "knowledge transfer", "soft target"]
-    架构优化: ["architecture", "mobilenet", "efficientnet", "lightweight", "efficient", "compact"]
-    低秩分解: ["low-rank", "matrix factorization", "svd", "decomposition", "rank approximation"]
+    对话_NLP: ["dialogue", "conversation", "instruction tuning", "alignment", "chatbot", "nlp"]
+    图像_CV: ["vision", "image", "segmentation", "detection", "diffusion", "restoration"]
+    多模态: ["multimodal", "vision-language", "vlm", "cross-modal", "image-text"]
+    微调_PEFT: ["fine-tuning", "lora", "adapter", "prompt tuning", "peft", "sft"]
+    Agent_RAG: ["agent", "tool use", "planning", "rag", "retrieval", "memory"]
+    高效AI: ["quantization", "pruning", "distillation", "efficient", "compression", "low-rank"]
 
 # 日志配置
 logging:

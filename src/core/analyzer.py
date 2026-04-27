@@ -55,6 +55,7 @@ class AILiteratureAnalyzer:
         self.summaries_dir = Path(paths_config['summaries_dir'])
         self.method_cards_dir = Path(paths_config['method_cards_dir'])
         self.batch_reports_dir = Path(paths_config['batch_reports_dir'])
+        self.extracted_texts_dir = self.output_dir / "extracted_texts"
         
         # 处理配置
         processing_config = self.config.get_processing_config()
@@ -75,6 +76,8 @@ class AILiteratureAnalyzer:
         self.logger.info(f"AI文献分析系统已启动")
         self.logger.info(f"使用模型: {self.model}")
         self.logger.info(f"输入目录: {self.input_dir}")
+        self.extracted_texts_dir.mkdir(parents=True, exist_ok=True)
+
         self.logger.info(f"输出目录: {self.output_dir}")
     
     def _setup_logging(self):
@@ -187,7 +190,7 @@ class AILiteratureAnalyzer:
         
         self.logger.error("所有重试都失败了")
         return ""
-    
+
     def analyze_paper_with_ai(self, pdf_text: str, pdf_filename: str) -> Dict[str, Any]:
         """使用AI分析论文"""
         self.logger.info("正在进行AI深度分析...")
@@ -202,7 +205,7 @@ class AILiteratureAnalyzer:
         )
         
         messages = [
-            {"role": "system", "content": "你是一个模型轻量化领域的专家，专门分析深度学习模型压缩和优化相关的学术论文。你的分析深入、客观、专业。"},
+            {"role": "system", "content": "你是一名面向AI方向研究生的论文精读导师，熟悉对话系统、图像处理、微调、Agent开发、多模态与高效AI方法。你的任务不是简单总结，而是用老师带学生读论文的方式，帮助学生建立问题意识、理解方法细节、判断实验可信度，并形成可复用的研究笔记。"},
             {"role": "user", "content": analysis_prompt}
         ]
         
@@ -220,7 +223,7 @@ class AILiteratureAnalyzer:
         method_prompt = self.method_card_template.format(analysis=analysis)
         
         messages = [
-            {"role": "system", "content": "你是一个技术文档专家，专门生成清晰简洁的技术方法卡片。"},
+            {"role": "system", "content": "你是一个AI研究方法卡片整理专家，擅长把论文方法压缩成便于复习、组会汇报和后续复现的结构化笔记。"},
             {"role": "user", "content": method_prompt}
         ]
         
@@ -238,12 +241,34 @@ class AILiteratureAnalyzer:
         analysis_file = self.summaries_dir / f"{safe_name}{suffix}.md"
         return analysis_file.exists()
     
-    def analyze_single_paper(self, pdf_path: Path) -> Dict[str, Any]:
+    def get_extracted_text_path(self, pdf_path: Path) -> Path:
+        """获取论文提取文本保存路径"""
+        safe_name = self._safe_filename(pdf_path.stem)
+        return self.extracted_texts_dir / f"{safe_name}_original_text.txt"
+
+    def save_extracted_text(self, pdf_path: Path, pdf_text: str):
+        """保存PDF提取文本，供Web界面回看原文"""
+        text_path = self.get_extracted_text_path(pdf_path)
+        content = "\n".join([
+            f"# {pdf_path.name} - 提取原文",
+            "",
+            f"提取时间: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}",
+            f"原始文件: {pdf_path.name}",
+            "",
+            "---",
+            "",
+            pdf_text
+        ])
+        with open(text_path, 'w', encoding='utf-8') as f:
+            f.write(content)
+        self.logger.info(f"提取文本已保存: {text_path.name}")
+
+    def analyze_single_paper(self, pdf_path: Path, force: bool = False) -> Dict[str, Any]:
         """分析单篇论文"""
         self.logger.info(f"开始分析: {pdf_path.name}")
         
         # 检查是否已分析
-        if self.is_already_analyzed(pdf_path):
+        if not force and self.is_already_analyzed(pdf_path):
             self.logger.info(f"跳过已分析的文件: {pdf_path.name}")
             return {"skipped": True, "file": pdf_path.name}
         
@@ -254,6 +279,7 @@ class AILiteratureAnalyzer:
             return {"error": "文本提取失败", "file": pdf_path.name}
         
         self.logger.info(f"文本提取成功，长度: {len(pdf_text)} 字符")
+        self.save_extracted_text(pdf_path, pdf_text)
         
         # AI分析
         analysis_result = self.analyze_paper_with_ai(pdf_text, pdf_path.name)
