@@ -35,7 +35,7 @@ AI-Literature-Analyzer-v2.0/
 ├── main.py                       # 保留的 CLI 批量分析入口
 ├── requirements.txt              # Python 依赖
 ├── config/
-│   ├── config.yaml               # 示例配置；发布前不应包含真实 Key
+│   ├── config.yaml               # 示例配置
 │   └── config.yaml.example       # 配置模板
 ├── src/
 │   ├── core/
@@ -47,8 +47,8 @@ AI-Literature-Analyzer-v2.0/
 │       └── progress_monitor.py   # CLI 进度监控
 ├── prompts/                      # CLI 兼容的默认 Prompt 模板
 ├── data/
-│   ├── input/.gitkeep            # 本地 PDF 输入目录；PDF 不应提交
-│   └── output/                   # 本地分析输出；结果不应提交
+│   ├── input/.gitkeep            # 本地 PDF 输入目录
+│   └── output/                   # 本地分析输出
 ├── LICENSE                       # 原项目 MIT License
 └── README.md
 ```
